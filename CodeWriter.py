@@ -54,3 +54,7 @@ class CodeWriter:
                         self.output_file.write("M=M+1\n")
                         self.output_file.write("\n")
         
+        
+        def close_output_file(self) -> None:
+            self.output_file.close()
+        
