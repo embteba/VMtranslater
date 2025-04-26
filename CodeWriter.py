@@ -13,7 +13,7 @@ class CodeWriter:
             self.filename = new_trans_filename
         
             
-        # VMコマンドをHackアセンブリに変換する
+        # 算術コマンドをHackアセンブリに変換する
         # C_ARITHMETICのときにのみコールする
         def write_Arithmetic(self, trans_target_vmcommand: str) -> None:
             if trans_target_vmcommand == "add":
@@ -24,7 +24,8 @@ class CodeWriter:
                 self.output_file.write("A=D\n")
                 self.output_file.write("D=M\n")
                 self.output_file.write("A=A-1\n")
-                self.output_file.write("M=M+D\n")
+                self.output_file.write("M=D+M\n")
+                self.output_file.write("\n")
                 
             if trans_target_vmcommand == "sub":
                 self.output_file.write("// add\n")
@@ -35,5 +36,21 @@ class CodeWriter:
                 self.output_file.write("D=M\n")
                 self.output_file.write("A=A-1\n")
                 self.output_file.write("M=M-D\n")
-                
-                
+                self.output_file.write("\n")
+        
+        
+        # 算術コマンドをHackアセンブリに変換する
+        # C_ARITHMETICのときにのみコールする
+        def write_PushPop(self, command: str, segment: str, index: int) -> None:
+                if command == "C_PUSH":
+                    if segment == "constant":
+                        self.output_file.write(f"// push constant {index}\n")
+                        self.output_file.write(f"@{index}\n")
+                        self.output_file.write("D=A\n")
+                        self.output_file.write("@SP\n")
+                        self.output_file.write("A=M\n")
+                        self.output_file.write("M=D\n")
+                        self.output_file.write("@SP\n")
+                        self.output_file.write("M=M+1\n")
+                        self.output_file.write("\n")
+        
