@@ -73,7 +73,7 @@ class Parser:
             raise ValueError(f"Unknown command: {self.current_command}")
         
         
-    # 命令の第一引数を取得    
+    # 命令の第1引数を取得    
     # RETURNコマンドの場合はそもそも関数を呼ばない
     def arg1(self) -> str:
         # 算術コマンドの場合はコマンドそのものを返す
@@ -97,7 +97,7 @@ class Parser:
             raise ValueError(f"Unknown command: {self.current_command}") 
     
     
-    #　命令の第2引数を取得
+    # 命令の第2引数を取得
     # PUSH,POP,FUNCTION,CALLコマンドの場合のみ呼ぶ
     def arg2(self) -> str:
         if self.command_type() == "C_PUSH":
