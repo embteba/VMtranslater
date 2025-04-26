@@ -93,6 +93,22 @@ class Parser:
             return self.current_command.split()[1]
         elif self.command_type() == "C_CALL":
             return self.current_command.split()[1]
-        
+        else:
+            raise ValueError(f"Unknown command: {self.current_command}") 
+    
+    
+    #　命令の第2引数を取得
+    # PUSH,POP,FUNCTION,CALLコマンドの場合のみ呼ぶ
+    def arg2(self) -> str:
+        if self.command_type() == "C_PUSH":
+            return self.current_command.split()[2]
+        elif self.command_type() == "C_POP":  
+            return self.current_command.split()[2]
+        elif self.command_type() == "C_FUNCTION":
+            return self.current_command.split()[2]
+        elif self.command_type() == "C_CALL":
+            return self.current_command.split()[2]
+        else:
+            raise ValueError(f"Unknown command: {self.current_command}") 
 
 
