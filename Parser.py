@@ -72,5 +72,27 @@ class Parser:
         else:
             raise ValueError(f"Unknown command: {self.current_command}")
         
+        
+    # 命令の第一引数を取得    
+    # RETURNコマンドの場合はそもそも関数を呼ばない
+    def arg1(self) -> str:
+        # 算術コマンドの場合はコマンドそのものを返す
+        if self.command_type() == "C_ARITHMETIC":
+            return self.current_command
+        elif self.command_type() == "C_LABEL":
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_GOTO":
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_IF":
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_PUSH":
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_POP":  
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_FUNCTION":
+            return self.current_command.split()[1]
+        elif self.command_type() == "C_CALL":
+            return self.current_command.split()[1]
+        
 
 
