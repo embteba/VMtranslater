@@ -37,6 +37,14 @@ class CodeWriter:
                 self.output_file.write("A=A-1\n")
                 self.output_file.write("M=M-D\n")
                 self.output_file.write("\n")
+                
+            if trans_target_vmcommand == "neg":
+                self.output_file.write("// neg\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=-M\n")
+                self.output_file.write("\n")
         
         
         # 算術コマンドをHackアセンブリに変換する
