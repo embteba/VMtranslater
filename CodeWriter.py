@@ -1,4 +1,3 @@
-
 # VMコマンドをHackアセンブリに変換するクラス
 class CodeWriter:
         def __init__(self, filename_or_filepath: str):
@@ -45,6 +44,32 @@ class CodeWriter:
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=-M\n")
                 self.output_file.write("\n")
+                
+            if trans_target_vmcommand == "eq":
+                self.output_file.write("// eq\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M-D\n")
+                self.output_file.write("@EQUAL\n")
+                self.output_file.write("D;JEQ\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=0\n")
+                self.output_file.write("@END_EQ\n")
+                self.output_file.write("0;JMP\n")
+                self.output_file.write("(EQUAL)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=-1\n")
+                self.output_file.write("(END_EQ)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M+1\n")
+                self.output_file.write("\n")
         
         
         # 算術コマンドをHackアセンブリに変換する
@@ -65,4 +90,3 @@ class CodeWriter:
         
         def close_output_file(self) -> None:
             self.output_file.close()
-        
