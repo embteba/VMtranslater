@@ -3,7 +3,6 @@ import CodeWriter
 
 # 変換対象ファイルの定義
 VM_FILE = "StackTest.vm"
-# VM_FILE = "debug.vm"
 
 # Parserクラスのインスタンスを作成
 parser = Parser.Parser(VM_FILE)
