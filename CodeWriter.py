@@ -4,7 +4,8 @@ class CodeWriter:
             # クラス変数定義
             self.filename: str = ""                      # ファイル名またはファイルパス 今はいったんファイル名だけの想定
             self.output_file = open("out.asm", "w")      # 出力ファイル
-            self.stack_pointer: int = 256                # スタックポインタの初期値
+            self.eqcounter: int = 0                      # eqコマンドのカウンタ
+            self.gtcounter: int = 0                      # eqコマンドのカウンタ
 
 
         # CodeWriterモジュールに新規VMファイルの変換が開始したことを通知する
@@ -55,21 +56,75 @@ class CodeWriter:
                 self.output_file.write("M=M-1\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("D=M-D\n")
-                self.output_file.write("@EQUAL\n")
+                self.output_file.write(f"@EQUAL{self.eqcounter}\n")
                 self.output_file.write("D;JEQ\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=0\n")
-                self.output_file.write("@END_EQ\n")
+                self.output_file.write(f"@END_EQ{self.eqcounter}\n")
                 self.output_file.write("0;JMP\n")
-                self.output_file.write("(EQUAL)\n")
+                self.output_file.write(f"(EQUAL{self.eqcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=-1\n")
-                self.output_file.write("(END_EQ)\n")
+                self.output_file.write(f"(END_EQ{self.eqcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("M=M+1\n")
                 self.output_file.write("\n")
+                self.eqcounter += 1
+                
+            if trans_target_vmcommand == "gt":
+                self.output_file.write("// gt\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M-D\n")
+                self.output_file.write("@GREATER\n")
+                self.output_file.write("D;JGT\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=0\n")
+                self.output_file.write("@END_GT\n")
+                self.output_file.write("0;JMP\n")
+                self.output_file.write("(GREATER)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=-1\n")
+                self.output_file.write("(END_GT)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M+1\n")
+                self.output_file.write("\n")
+                
+            if trans_target_vmcommand == "lt":
+                self.output_file.write("// lt\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")  
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")  
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M-D\n")  
+                self.output_file.write("@LESS\n")
+                self.output_file.write("D;JLT\n")  
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=0\n")  
+                self.output_file.write("@END_LT\n")
+                self.output_file.write("0;JMP\n")
+                self.output_file.write("(LESS)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=-1\n")  
+                self.output_file.write("(END_LT)\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M+1\n")  
+                self.output_file.write("\n")
+
         
         
         # 算術コマンドをHackアセンブリに変換する
