@@ -2,7 +2,8 @@ import Parser
 import CodeWriter
 
 # 変換対象ファイルの定義
-VM_FILE = "SimpleAdd.vm"
+VM_FILE = "StackTest.vm"
+# VM_FILE = "debug.vm"
 
 # Parserクラスのインスタンスを作成
 parser = Parser.Parser(VM_FILE)
@@ -28,7 +29,7 @@ while parser.has_more_commands():
         arg1 = parser.arg1()
         
     # コマンドの第二引数を取得
-    if    (command_type == "C_PUSH" 
+    if(    command_type == "C_PUSH" 
         or command_type == "C_POP" 
         or command_type == "C_FUNCTION" 
         or command_type == "C_CALL"):

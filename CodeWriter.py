@@ -42,8 +42,7 @@ class CodeWriter:
             if trans_target_vmcommand == "neg":
                 self.output_file.write("// neg\n")
                 self.output_file.write("@SP\n")
-                self.output_file.write("M=M-1\n")
-                self.output_file.write("A=M\n")
+                self.output_file.write("A=M-1\n")
                 self.output_file.write("M=-M\n")
                 self.output_file.write("\n")
                 
@@ -135,7 +134,8 @@ class CodeWriter:
                 self.output_file.write("A=M\n")
                 self.output_file.write("D=M\n")
                 self.output_file.write("A=A-1\n")
-                self.output_file.write("M=D&M\n")
+                self.output_file.write("D=D&M\n")
+                self.output_file.write("M=D\n")
                 self.output_file.write("\n")
             
             if trans_target_vmcommand == "or":
