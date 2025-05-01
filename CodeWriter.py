@@ -6,6 +6,7 @@ class CodeWriter:
             self.output_file = open("out.asm", "w")      # 出力ファイル
             self.eqcounter: int = 0                      # eqコマンドのカウンタ
             self.gtcounter: int = 0                      # eqコマンドのカウンタ
+            self.ltcounter: int = 0                      # eqコマンドのカウンタ
 
 
         # CodeWriterモジュールに新規VMファイルの変換が開始したことを通知する
@@ -83,21 +84,22 @@ class CodeWriter:
                 self.output_file.write("M=M-1\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("D=M-D\n")
-                self.output_file.write("@GREATER\n")
+                self.output_file.write(f"@GREATER{self.gtcounter}\n")
                 self.output_file.write("D;JGT\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=0\n")
-                self.output_file.write("@END_GT\n")
+                self.output_file.write(f"@END_GT{self.gtcounter}\n")
                 self.output_file.write("0;JMP\n")
-                self.output_file.write("(GREATER)\n")
+                self.output_file.write(f"(GREATER{self.gtcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=-1\n")
-                self.output_file.write("(END_GT)\n")
+                self.output_file.write(f"(END_GT{self.gtcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("M=M+1\n")
                 self.output_file.write("\n")
+                self.gtcounter += 1
                 
             if trans_target_vmcommand == "lt":
                 self.output_file.write("// lt\n")
@@ -109,24 +111,24 @@ class CodeWriter:
                 self.output_file.write("M=M-1\n")  
                 self.output_file.write("A=M\n")
                 self.output_file.write("D=M-D\n")  
-                self.output_file.write("@LESS\n")
+                self.output_file.write(f"@LESS{self.ltcounter}\n")
                 self.output_file.write("D;JLT\n")  
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=0\n")  
-                self.output_file.write("@END_LT\n")
+                self.output_file.write(f"@END_LT{self.ltcounter}\n")
                 self.output_file.write("0;JMP\n")
-                self.output_file.write("(LESS)\n")
+                self.output_file.write(f"(LESS{self.ltcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("A=M\n")
                 self.output_file.write("M=-1\n")  
-                self.output_file.write("(END_LT)\n")
+                self.output_file.write(f"(END_LT{self.ltcounter})\n")
                 self.output_file.write("@SP\n")
                 self.output_file.write("M=M+1\n")  
                 self.output_file.write("\n")
-
+                self.ltcounter += 1
         
-        
+       
         # 算術コマンドをHackアセンブリに変換する
         # C_ARITHMETICのときにのみコールする
         def write_PushPop(self, command: str, segment: str, index: int) -> None:
