@@ -127,6 +127,34 @@ class CodeWriter:
                 self.output_file.write("M=M+1\n")  
                 self.output_file.write("\n")
                 self.ltcounter += 1
+                
+            if trans_target_vmcommand == "and":
+                self.output_file.write("// and\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M\n")
+                self.output_file.write("A=A-1\n")
+                self.output_file.write("M=D&M\n")
+                self.output_file.write("\n")
+            
+            if trans_target_vmcommand == "or":
+                self.output_file.write("// and\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("D=M\n")
+                self.output_file.write("A=A-1\n")
+                self.output_file.write("M=D|M\n")
+                self.output_file.write("\n")
+                
+            if trans_target_vmcommand == "not":
+                self.output_file.write("// and\n")
+                self.output_file.write("@SP\n")
+                self.output_file.write("M=M-1\n")
+                self.output_file.write("A=M\n")
+                self.output_file.write("M=!M\n")
+                self.output_file.write("\n")
         
        
         # 算術コマンドをHackアセンブリに変換する
