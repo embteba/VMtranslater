@@ -1,3 +1,5 @@
+import sys
+
 # VMコマンドをHackアセンブリに変換するクラス
 class CodeWriter:
         def __init__(self, filename_or_filepath: str):
@@ -160,6 +162,7 @@ class CodeWriter:
         # 算術コマンドをHackアセンブリに変換する
         # C_ARITHMETICのときにのみコールする
         def write_PushPop(self, command: str, segment: str, index: int) -> None:
+                # PUSHコマンドの変換
                 if command == "C_PUSH":
                     if segment == "constant":
                         self.output_file.write(f"// push constant {index}\n")
@@ -171,7 +174,36 @@ class CodeWriter:
                         self.output_file.write("@SP\n")
                         self.output_file.write("M=M+1\n")
                         self.output_file.write("\n")
+                        
+                # POPコマンドの変換
+                elif command == "C_POP":
+                    if segment == "temp":
+                        if index >= 8: # tempセグメントは0-7まで
+                            raise ValueError(print_error("tempセグメントは0-7までのインデックスを指定してください。"))
+                        else:                           
+                            self.output_file.write(f"// pop temp {index}\n")
+                            self.output_file.write("@SP\n")
+                            self.output_file.write("M=M-1\n")
+                            self.output_file.write("A=M\n")
+                            self.output_file.write("D=M\n")
+                            self.output_file.write(f"@{index + 5}\n")  
+                            self.output_file.write("M=D\n")
+                            self.output_file.write("\n")
         
         
+        
+        
+        
+        # ファイルクローズメソッド
         def close_output_file(self) -> None:
             self.output_file.close()
+
+
+        
+# エラーメッセージを赤色で表示するメソッド
+def print_error(message):
+    RED = "\033[91m"
+    RESET = "\033[0m"
+    sys.stderr.write(f"{RED}{message}{RESET}\n")
+            
+    
