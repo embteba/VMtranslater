@@ -189,6 +189,20 @@ class CodeWriter:
                             self.output_file.write(f"@{index + 5}\n")  
                             self.output_file.write("M=D\n")
                             self.output_file.write("\n")
+                    
+                    if segment == "local":
+                        if index != 0: # localセグメントは0のみ
+                            raise ValueError(print_error("localセグメントは0のインデックスを指定してください。"))
+                        else:
+                            self.output_file.write(f"// pop local {index}\n")
+                            self.output_file.write("@SP\n")
+                            self.output_file.write("M=M-1\n")
+                            self.output_file.write("A=M\n")
+                            self.output_file.write("D=M\n")
+                            self.output_file.write("@1\n")
+                            self.output_file.write("A=M\n")  
+                            self.output_file.write("M=D\n")
+                            self.output_file.write("\n")    
         
         
         
@@ -197,7 +211,6 @@ class CodeWriter:
         # ファイルクローズメソッド
         def close_output_file(self) -> None:
             self.output_file.close()
-
 
         
 # エラーメッセージを赤色で表示するメソッド
